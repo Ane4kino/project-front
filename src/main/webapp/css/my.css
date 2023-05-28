@@ -1,0 +1,157 @@
+.h1 {
+    color: #f9ae65;
+    font-family: ‘Rouge Script’, cursive;
+    font-size: 4vw;
+    font-weight: normal;
+    line-height: 48px;
+    margin: 0 0 50px;
+    text-align: center;
+    text-shadow: 1px 1px 2px #082b34;
+}
+
+.account {
+    width: 100%;
+    margin: 0 0 35px 0;
+    background: #3c6d79;
+    border-radius: 5px;
+}
+
+.inputBottomText {
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    color: rgb(190, 188, 188);
+    font-style: italic;
+    width: 30%;
+    padding: 10px 5px 10px 32px;
+    border: 1px solid rgb(178, 178, 178);
+    box-sizing : content-box;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px 0 rgba(168, 168, 168, 0.6) inset;
+    transition: all 0.2s linear;
+}
+
+
+.inputText {
+    justify-content: space-between;
+    margin-left: auto;
+    margin-bottom: auto;
+    color: rgb(190, 188, 188);
+    font-style: italic;
+    width: 40%;
+    margin-top: 4px;
+    padding: 10px 5px 10px 32px;
+    border: 1px solid rgb(178, 178, 178);
+    box-sizing : content-box;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px 0 rgba(168, 168, 168, 0.6) inset;
+    transition: all 0.2s linear;
+
+}
+.inputTextNumber{
+    margin-left: auto;
+    margin-bottom: auto;
+    color: rgb(190, 188, 188);
+    font-style: italic;
+    width: 1%;
+    margin-top: 4px;
+    padding: 10px 5px 10px 32px;
+    border: 1px solid rgb(178, 178, 178);
+    box-sizing : content-box;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px 0 rgba(168, 168, 168, 0.6) inset;
+    transition: all 0.2s linear;
+}
+.button{
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 30%;
+    cursor: pointer;
+    background: #3C6D79FF;
+    padding: 8px 5px;
+    font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
+    color: #f9ae65;
+    font-size: 24px;
+    border: 1px solid rgb(28, 108, 122);
+    margin-bottom: 10px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    box-shadow:
+            0 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
+            0 0 0 3px rgb(254, 254, 254),
+            0 5px 3px 3px rgb(210, 210, 210);
+    /*transition: all 0.2s linear;*/
+}
+
+.newString {
+    background-color: rgba(60, 109, 121, 0.8);
+    border-radius: 8px 8px 8px 8px;
+}
+
+.blockH2{
+    background-color: #3c6d79;
+    border-radius: 8px 8px 8px 8px;
+}
+.h2 {
+    margin-left: 10px;
+    color: #f9ae65;
+    font-family: ‘Julius Sans One’, sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #082b34;
+    background-color: #3c6d79;
+    border-radius: 8px 8px 8px 8px;
+}
+
+.text {
+    background-color: #3c6d79;
+    color: #f9ae65;
+    text-align: center;
+    font: small-caps 24px/1 sans-serif;
+    font-size: 34px;
+    font-weight: 100;
+    border-radius: 8px 8px 8px 8px;
+}
+
+.table {
+    width: 100%;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.table thead th {
+    font-weight: bold;
+    text-align: left;
+    border: none;
+    padding: 10px 15px;
+    background: #3c6d79;
+    font-size: 14px;
+}
+
+.table thead tr th:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.table thead tr th:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.table tbody td {
+    text-align: left;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.table tbody tr:nth-child(even) {
+    background: #f3f3f3;
+}
+
+.table tbody tr td:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.table tbody tr td:last-child {
+    border-radius: 0 8px 8px 0;
+}
