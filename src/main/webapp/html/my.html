@@ -93,7 +93,7 @@
             <option value='DRUID'>DRUID</option>
         </select>
         <br>
-        //**//
+
         <label for="inputLevelNew">Level:</label>
         <input class="inputText" type="number" id="inputLevelNew" name="lavel" min="0" max="100">
         <br>
@@ -112,294 +112,241 @@
         <span>
     <button class="button" type="submit" onclick="createAcc()">Save</button>
     </span>
-</div>
+    </div>
 
 
-<script>
-    function showTable(pageNumber) {
-        $("tr:has(td)").remove();
-        let url = "/rest/players?";
+    <script>
+        function showTable(pageNumber) {
+            $("tr:has(td)").remove();
+            let url = "/rest/players?";
 
-        let countPerPage = $("#count1").val();
-        console.log("countPerPage =" + countPerPage);
-        if (countPerPage == null) {
-            countPerPage = 3;
-        }
+            let countPerPage = $("#count1").val();
+            console.log("countPerPage =" + countPerPage);
+            if (countPerPage == null) {
+                countPerPage = 3;
+            }
 
-        url = url.concat("pageSize=").concat(countPerPage);
-        if (pageNumber == null) {
-            pageNumber = 0;
-        }
-        url = url.concat("&pageNumber=").concat(pageNumber);
+            url = url.concat("pageSize=").concat(countPerPage);
+            if (pageNumber == null) {
+                pageNumber = 0;
+            }
+            url = url.concat("&pageNumber=").concat(pageNumber);
 
-        $.get(url, function (response) {
-            $.each(response, function (i, item) {
-                $("<tr>").html("<td>"
-                    + item.id + "</td><td>"
-                    + item.name + "</td><td>"
-                    + item.title + "</td><td>"
-                    + item.race + "</td><td>"
-                    + item.profession + "</td><td>"
-                    + item.level + "</td><td>"
-                    + new Date(item.birthday).toLocaleDateString() + "</td><td>"
-                    + item.banned + "</td><td>"
-                    + "<button id='buttonEdit" + item.id + "' onclick='editAcc(" + item.id + ")'>"
-                    + "<img src= '/img/edit.png'>"
-                    + "</button>" + "</td><td>"
-                    + "<button id='buttonDelete" + item.id + "' onclick='deleteAcc(" + item.id + ")'>"
-                    + "<img src= '/img/delete.png'>"
-                    + "</button>" + "</td>"
-                ).appendTo("#playerData")
+            $.get(url, function (response) {
+                $.each(response, function (i, item) {
+                    $("<tr>").html("<td>"
+                        + item.id + "</td><td>"
+                        + item.name + "</td><td>"
+                        + item.title + "</td><td>"
+                        + item.race + "</td><td>"
+                        + item.profession + "</td><td>"
+                        + item.level + "</td><td>"
+                        + new Date(item.birthday).toLocaleDateString() + "</td><td>"
+                        + item.banned + "</td><td>"
+                        + "<button id='buttonEdit" + item.id + "' onclick='editAcc(" + item.id + ")'>"
+                        + "<img src= '/img/edit.png'>"
+                        + "</button>" + "</td><td>"
+                        + "<button id='buttonDelete" + item.id + "' onclick='deleteAcc(" + item.id + ")'>"
+                        + "<img src= '/img/delete.png'>"
+                        + "</button>" + "</td>"
+                    ).appendTo("#playerData")
+                });
             });
-        });
 
-        let totalCount = getTotalCount();
+            let totalCount = getTotalCount();
 
-        let pagesCount = Math.ceil(totalCount / countPerPage);
+            let pagesCount = Math.ceil(totalCount / countPerPage);
 
-        $("button.pgn-bnt-styled").remove();
+            $("button.pgn-bnt-styled").remove();
 
-        for (let i = 0; ipagesCount; i++) {
-            let buttonTag = "<button>" + (i + 1) + "</button>";
-            let btn = $(buttonTag)
-                .attr('id', "paddingButton" + i)
-                .attr('onclick', "showTable(" + i + ")")
-                .addClass('pgn-bnt-styled')
-            $('#paddingButtons').append(btn)
+            for (let i = 0; i < pagesCount; i++) {
+                let buttonTag = "<button>" + (i + 1) + "</button>";
+                let btn = $(buttonTag)
+                    .attr('id', "paddingButton" + i)
+                    .attr('onclick', "showTable(" + i + ")")
+                    .addClass('pgn-bnt-styled')
+                $('#paddingButtons').append(btn)
+            }
+            let identifier = "#paddingButton" + pageNumber;
+            $(identifier).css('color', "red");
         }
-        let identifier = "#paddingButton" + pageNumber;
-        $(identifier).css('color', "red");
-    }
 
-    function getTotalCount() {
-        let url = "/rest/players/count";
-        let res = 0;
-        $.ajax({
-            url: url,
-            async: false,
-            success: function (result) {
-                res = parseInt(result)
-            }
-        })
-        console.log(res);
-        return res;
-    }
+        function getTotalCount() {
+            let url = "/rest/players/count";
+            let res = 0;
+            $.ajax({
+                url: url,
+                async: false,
+                success: function (result) {
+                    res = parseInt(result)
+                }
+            })
+            console.log(res);
+            return res;
+        }
 
-    function deleteAcc(id) {
-        let url = "/rest/players/" + id;
-        $.ajax({
-            url: url,
-            type: "DELETE",
-            success: function () {
-                showTable(getCurrentPage());
-            }
-        });
-    }
+        function deleteAcc(id) {
+            let url = "/rest/players/" + id;
+            $.ajax({
+                url: url,
+                type: "DELETE",
+                success: function () {
+                    showTable(getCurrentPage());
+                }
+            });
+        }
 
-    function editAcc(id) {
-        let identifierEdit = "#buttonEdit" + id;
-        let identifierDelete = "#buttonDelete" + id;
+        function editAcc(id) {
+            let identifierEdit = "#buttonEdit" + id;
+            let identifierDelete = "#buttonDelete" + id;
 
-        $(identifierDelete).remove();
-        let saveImageTag = "<img src='/img/save.png'>";
-        $(identifierEdit).html(saveImageTag);
+            $(identifierDelete).remove();
+            let saveImageTag = "<img src='/img/save.png'>";
+            $(identifierEdit).html(saveImageTag);
 
-        let currentTrElement = $(identifierEdit).parent().parent();
-        let children = currentTrElement.children();
-        let tdName = children[1];
-        tdName.innerHTML = "<input id='inputName" + id + "' type='text' value='" + tdName.innerHTML + "'>";
+            let currentTrElement = $(identifierEdit).parent().parent();
+            let children = currentTrElement.children();
+            let tdName = children[1];
+            tdName.innerHTML = "<input id='inputName" + id + "' type='text' value='" + tdName.innerHTML + "'>";
 
-        let tdTitle = children[2];
-        tdTitle.innerHTML = "<input id='inputTitle" + id + "' type='text' value='" + tdTitle.innerHTML + "'>";
+            let tdTitle = children[2];
+            tdTitle.innerHTML = "<input id='inputTitle" + id + "' type='text' value='" + tdTitle.innerHTML + "'>";
 
-        let tdRace = children[3];
-        let raceId = "#selectRace" + id;
-        let raceCurrentValue = tdRace.innerHTML;
-        tdRace.innerHTML = getDropdownRaceHtml(id);
-        $(raceId).val(raceCurrentValue).change();
+            let tdRace = children[3];
+            let raceId = "#selectRace" + id;
+            let raceCurrentValue = tdRace.innerHTML;
+            tdRace.innerHTML = getDropdownRaceHtml(id);
+            $(raceId).val(raceCurrentValue).change();
 
-        let tdProfession = children[4];
-        let professionId = "#selectProfession" + id;
-        let professionCurrentValue = tdProfession.innerHTML;
-        tdProfession.innerHTML = getDropdownProfessionHtml(id);
-        $(professionId).val(professionCurrentValue).change();
+            let tdProfession = children[4];
+            let professionId = "#selectProfession" + id;
+            let professionCurrentValue = tdProfession.innerHTML;
+            tdProfession.innerHTML = getDropdownProfessionHtml(id);
+            $(professionId).val(professionCurrentValue).change();
 
-        let tdBanned = children[7];
-        let bannedId = "#selectBanned" + id;
-        let bannedCurrentValue = tdBanned.innerHTML;
-        tdBanned.innerHTML = getDropdownBannedHtml(id);
-        $(bannedId).val(bannedCurrentValue).change();
+            let tdBanned = children[7];
+            let bannedId = "#selectBanned" + id;
+            let bannedCurrentValue = tdBanned.innerHTML;
+            tdBanned.innerHTML = getDropdownBannedHtml(id);
+            $(bannedId).val(bannedCurrentValue).change();
 
-        let propertySaveTag = "saveAcc(" + id + ")";
-        $(identifierEdit).attr('onclick', propertySaveTag);
-    }
+            let propertySaveTag = "saveAcc(" + id + ")";
+            $(identifierEdit).attr('onclick', propertySaveTag);
+        }
 
-    function createAcc() {
-        let valueName = $("#inputNameNew").val();
-        let valueTitle = $("#inputTitleNew").val();
-        let valueRace = $("#inputRaceNew").val();
-        let valueProfession = $("#inputProfessionNew").val();
-        let valueLevel = $("#inputLevelNew").val();
-        let valueBirthday = $("#inputBirthdayew").val();
-        let valueBanned = $("#inputBannedNew").val();
+        function createAcc() {
+            let valueName = $("#inputNameNew").val();
+            let valueTitle = $("#inputTitleNew").val();
+            let valueRace = $("#inputRaceNew").val();
+            let valueProfession = $("#inputProfessionNew").val();
+            let valueLevel = $("#inputLevelNew").val();
+            let valueBirthday = $("#inputBirthdayew").val();
+            let valueBanned = $("#inputBannedNew").val();
 
-        let currentPage = window.location.href;
-        let url = "/rest/players";
-        $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json;charset=UTF-8',
-            async: false,
-            data: JSON.stringify({
-                "name": valueName,
-                "title": valueTitle,
-                "race": valueRace,
-                "profession": valueProfession,
-                "banned": valueBanned,
-                "level": valueLevel,
-                "birthday": new Date(valueBirthday).getTime()
-            }),
-            success: function () {
-                $("#inputNameNew").val("");
-                $("#inputTitleNew").val("");
-                $("#selectRaceNew").val("");
-                $("#selectProfessionNew").val("");
-                $("#selectLevelNew").val("");
-                $("#selectBirthdayew").val("");
-                $("#selectBannedNew").val("");
-                showTable(getCurrentPage());
-            }
-        });
-    }
+            let currentPage = window.location.href;
+            let url = "/rest/players";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                async: false,
+                data: JSON.stringify({
+                    "name": valueName,
+                    "title": valueTitle,
+                    "race": valueRace,
+                    "profession": valueProfession,
+                    "banned": valueBanned,
+                    "level": valueLevel,
+                    "birthday": new Date(valueBirthday).getTime()
+                }),
+                success: function () {
+                    $("#inputNameNew").val("");
+                    $("#inputTitleNew").val("");
+                    $("#selectRaceNew").val("");
+                    $("#selectProfessionNew").val("");
+                    $("#selectLevelNew").val("");
+                    $("#selectBirthdayew").val("");
+                    $("#selectBannedNew").val("");
+                    showTable(getCurrentPage());
+                }
+            });
+        }
 
-    function saveAcc(id) {
-        let valueName = $("#inputName" + id).val();
-        let valueTitle = $("#inputTitle" + id).val();
-        let valueRace = $("#selectRace" + id).val();
-        let valueProfession = $("#selectProfession" + id).val();
-        let valueBanned = $("#selectBanned" + id).val();
+        function saveAcc(id) {
+            let valueName = $("#inputName" + id).val();
+            let valueTitle = $("#inputTitle" + id).val();
+            let valueRace = $("#selectRace" + id).val();
+            let valueProfession = $("#selectProfession" + id).val();
+            let valueBanned = $("#selectBanned" + id).val();
 
-        let url = "/rest/players/{id}" + id;
-        $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: 'json',
-            contentType: 'application/json;charset=UTF-8',
-            async: false,
-            data: JSON.stringify({
-                "name": valueName,
-                "title": valueTitle,
-                "race": valueRace,
-                "profession": valueProfession,
-                "banned": valueBanned,
-            }),
-            success: function () {
-                showTable(getCurrentPage());
-            }
-        });
-    }
+            let url = "/rest/players/{id}" + id;
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                async: false,
+                data: JSON.stringify({
+                    "name": valueName,
+                    "title": valueTitle,
+                    "race": valueRace,
+                    "profession": valueProfession,
+                    "banned": valueBanned,
+                }),
+                success: function () {
+                    showTable(getCurrentPage());
+                }
+            });
+        }
 
-    function getDropdownRaceHtml(id) {
-        let raceId = "selectRace" + id;
-        return "<label for='race'></label>"
-            + "<select id=" + raceId + "name='race'>"
-            + <option value='HUMAN'>HUMAN</option>
-            + <option value='DWARF'>DWARF</option>
-            + <option value='ELF'>ELF</option>
-            + <option value='GIANT'>GIANT</option>
-            + <option value='ORC'>ORC</option>
-            + <option value='TROLL'>TROLL</option>
-            + <option value='HOBBIT'>HOBBIT</option>
-            + "</select>"
-    }
+        function getDropdownRaceHtml(id) {
+            let raceId = "selectRace" + id;
+            return "<label for='race'></label>"
+                + "<select id=" + raceId + "name='race'>"
+                + "<option value='HUMAN'>HUMAN</option>"
+                + "<option value='DWARF'>DWARF</option>"
+                + "<option value='ELF'>ELF</option>"
+                + "<option value='GIANT'>GIANT</option>"
+                + "<option value='ORC'>ORC</option>"
+                + "<option value='TROLL'>TROLL</option>"
+                + "<option value='HOBBIT'>HOBBIT</option>"
+                + "</select>"
+        }
 
-    function getDropdownProfessionHtml(id) {
-        let professionId = "selectProfession" + id;
-        return "<label for='profession'></label>"
-            + "<select id=" + professionId + "name='profession'>"
-            + <option value='WARRIOR'>WARRIOR</option>
-            + <option value='ROGUE'>ROGUE</option>
-            + <option value='SORCERER'>SORCERER</option>
-            + <option value='CLERIC'>CLERIC</option>
-            + <option value='PALADIN'>PALADIN</option>
-            + <option value='NAZGUL'>NAZGUL</option>
-            + <option value='WARLOCK'>WARLOCK</option>
-            + <option value='DRUID'>DRUID</option>
-            + "</select>"
-    }
+        function getDropdownProfessionHtml(id) {
+            let professionId = "selectProfession" + id;
+            return "<label for='profession'></label>"
+                + "<select id=" + professionId + "name='profession'>"
+                + "<option value='WARRIOR'>WARRIOR</option>"
+                + "<option value='ROGUE'>ROGUE</option>"
+                + "<option value='SORCERER'>SORCERER</option>"
+                + "<option value='CLERIC'>CLERIC</option>"
+                + "<option value='PALADIN'>PALADIN</option>"
+                + "<option value='NAZGUL'>NAZGUL</option>"
+                + "<option value='WARLOCK'>WARLOCK</option>"
+                + "<option value='DRUID'>DRUID</option>"
+                + "</select>"
+        }
 
-    function getDropdownBannedHtml(id) {
-        let bannedId = "selectBanned" + id;
-        return "<label for='banned'></label>"
-            + "<select id=" + bannedId + "name='banned'>"
-            + <option value='true'>true</option>
-            + <option value='false'>false</option>
-            + "</select>"
-    }
+        function getDropdownBannedHtml(id) {
+            let bannedId = "selectBanned" + id;
+            return "<label for='banned'></label>"
+                + "<select id=" + bannedId + "name='banned'>"
+                + "<option value='true'>true</option>"
+                + "<option value='false'>false</option>"
+                + "</select>"
+        }
 
-    function getCurrentPage() {
-        let currentPage = 1;
-        $('button:parent(div)').each(function () {
-            if ($(this).css('color') === 'rgb(255,0,0)') {
-                currentPage = $(this).text();
-            }
-        });
-        return parseInt(currentPage) - 1;
-    }
-
-    // function fillTable(playerData) {
-    //     let tableBody = document.querySelector("#playerData");
-    //
-    //     playerData.forEach(function (player) {
-    //         let row = document.createElement("tr");
-    //
-    //         let idCell = document.createElement("td");
-    //         idCell.textContent = player.id;
-    //         row.appendChild(idCell);
-    //
-    //         let nameCell = document.createElement("td");
-    //         nameCell.textContent = player.name;
-    //         row.appendChild(nameCell);
-    //
-    //         let titleCell = document.createElement("td");
-    //         titleCell.textContent = player.title;
-    //         row.appendChild(titleCell);
-    //
-    //         let raceCell = document.createElement("td");
-    //         raceCell.textContent = player.race;
-    //         row.appendChild(raceCell);
-    //
-    //         let professionCell = document.createElement("td");
-    //         professionCell.textContent = player.profession;
-    //         row.appendChild(professionCell);
-    //
-    //         let levelCell = document.createElement("td");
-    //         levelCell.textContent = player.level;
-    //         row.appendChild(levelCell);
-    //
-    //         let birthdayCell = document.createElement("td");
-    //         birthdayCell.textContent = player.birthday;
-    //         row.appendChild(birthdayCell);
-    //
-    //         let bannedCell = document.createElement("td");
-    //         bannedCell.textContent = player.banned ? "Yes" : "No";
-    //         row.appendChild(bannedCell);
-    //
-    //         tableBody.appendChild(row);
-    //     });
-    // }
-    //
-    // fetch("/rest/players")
-    //     .then(function (response) {
-    //         return response.json();
-    //     })
-    //     .then(function (data) {
-    //         fillTable(data);
-    //     })
-    //     .catch(function (error) {
-    //         console.log("Произошла ошибка при выполнении запроса: ", error);
-    //     });
-</script>
+        function getCurrentPage() {
+            let currentPage = 1;
+            $('button:parent(div)').each(function () {
+                if ($(this).css('color') === 'rgb(255,0,0)') {
+                    currentPage = $(this).text();
+                }
+            });
+            return parseInt(currentPage) - 1;
+        }
+    </script>
 </body>
 </html>
